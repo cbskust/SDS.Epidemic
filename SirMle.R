@@ -1,4 +1,4 @@
-# This function calculates MLE usign SIR empidemic data
+# This function calculates MLE using SIR empidemic data
 # indata: input data set. SIR trajectory data set 
 # returning MLE of beta, gamma, rho of subsection 4.1
 
