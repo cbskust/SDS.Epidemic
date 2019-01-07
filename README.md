@@ -1,5 +1,5 @@
 # SDS_Epidemic
-Unidirectional Mass Transfer Models (MTMs) are compartmental dynamical systems with a notion of partial ordering among the compartments. One can interpret a unidirectional MTM as a Survival Dynamical System (SDS) that is fully described in terms of survival functions (as opposed to population counts in MTMs). In this repository, we provide the necessary toolkit for a statistical inference method based on the SDS interpretation of the compartmental susceptible-infected-recovered (SIR) epidemic model due to Kermack and McKendrick.
+Unidirectional Mass Transfer Models (MTMs) are compartmental dynamical systems with a notion of partial ordering among the compartments. One can interpret a unidirectional MTM as a Survival Dynamical System (SDS) that is fully described in terms of survival functions (as opposed to population counts in MTMs). In this repository, we provide the necessary toolkit for a statistical inference method based on the SDS interpretation of the compartmental susceptible-infected-recovered (SIR) epidemic model due to Kermack and McKendrick for the papaer on https://arxiv.org/abs/1207.3137.
 
 We provide 7 R scripts.
 
