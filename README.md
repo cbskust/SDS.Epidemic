@@ -1,7 +1,10 @@
-# SDS_Epidemic
-Unidirectional Mass Transfer Models (MTMs) are compartmental dynamical systems with a notion of partial ordering among the compartments. One can interpret a unidirectional MTM as a Survival Dynamical System (SDS) that is fully described in terms of survival functions (as opposed to population counts in MTMs). In this repository, we provide the necessary toolkit for a statistical inference method based on the SDS interpretation of the compartmental susceptible-infected-recovered (SIR) epidemic model due to Kermack and McKendrick for the papaer on https://arxiv.org/abs/1207.3137.
+# SDS.Epidemic
+In this paper, we show that solutions to ordinary differential equations describing the large-population limits of Markovian stochastic epidemic models can be interpreted as survival or cumulative hazard functions when analysing data on individuals sampled from the population. We refer to the individual-level survival and hazard functions derived from population-level equations as a survival dynamical system (SDS). To illustrate how population-level dynamics imply probability laws for individual-level infection and recovery times that can be used for statistical inference, we show numerical examples based on 
+data maximum-likelihood analysis. 
 
-We provide 7 R scripts.
+In this repository, we provide the necessary toolkit for a statistical inference method based on the SDS interpretation of the compartmental susceptible-infected-recovered (SIR) epidemic model due to Kermack and McKendrick for the papaer on http://dx.doi.org/10.1098/rsfs.2019.0048.
+
+We provide 8 R scripts.
 
 Sellke.R:  This function generate synthetic epidemic data using Sellke construciotn  in Algorithm 3.1. 
 
