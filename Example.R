@@ -2,6 +2,7 @@ library(plyr)
 library(MASS)
 library(smfsb)
 library(ramcmc) 
+library(SDSMCMC)
 
 source("GaussianMCMC.R")
 source("GillespieMCMC.R")
@@ -9,10 +10,12 @@ source("SdsMCMC.R")
 source("Sellke.R")
 source("SellkeToTrajecotory.R")
 source("SirMle.R")
+source("sir_ode.R")
 
 #initial parameter setting
-k1 = 1.5; k2 = 1.0 ; k3 = 0.05; n1=1000; n2=100;T.max = 3; sim.num = 5000;
-
+k1 = 2; k2 = 0.5 ; k3 = 0.05; n1=1000; n2=1000;T.max = 1; sim.num = 3000;
+beta=k1; gamma=k2; rho=k3;
+plot.ts(euler(fun=ode.sir),plot.type="si",ylab='SIR_ODE')
 #generating synthetic epidemic data using Sellke construction
 pop.data = Sellke(n=n2, rho=k3, beta=k1, gamma=k2, Tmax = T.max)
 
@@ -31,10 +34,21 @@ plot(gillespie[,2],type="l")
 #MCMC using Method 3
 sds <- SDS.Likelihood.MCMC(data = pop.data, Tmax=T.max, nrepeat = sim.num, tun=c(0.1,0.1,0.1), 
                            prior.a=c(0.001,0.001,0.05*0.1), prior.b=c(0.001,0.001,0.1), ic = c(1.5, 1, 0.05))
-summary(sds)
+summary(sds[-c(1:500),])
 plot(sds[,1],type="l")
 plot(sds[,2],type="l")
 plot(sds[,3],type="l")
+
+#MCMC using Method 3 (including n)
+sds <- SDS.Likelihood.withN.MCMC(data = pop.data, Tmax=T.max, nrepeat = sim.num, tun=c(0.1,0.1,0.1, 2000), 
+                           prior.a=c(0.001,0.001,0.05*0.1,0.001), prior.b=c(0.001,0.001,0.1,0.001), ic = c(1.5, 1, 0.05))
+summary(sds[-c(1:500),])
+plot(sds[,4],type="l")
+plot(sds[,1],type="l")
+plot(sds[,2],type="l")
+plot(sds[,3],type="l")
+
+
 
 #MCMC using Method 4
 gaussian <- Gaussian.MCMC(emp.sir, nrepeat=sim.num, ic = c(1, 1, 0.1), tun=c(0.1,0.1,1), prior.a=c(0.001,0.001,0.05*0.1)
