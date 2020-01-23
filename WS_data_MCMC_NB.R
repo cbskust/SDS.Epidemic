@@ -4,31 +4,30 @@ library(plyr)
 library(MASS)
 library(smfsb)
 library(ramcmc) 
-
-source("GaussianMCMC.R")
-source("GillespieMCMC.R")
+library(SDSMCMC)
 source("SdsMCMC.R")
-source("Sellke.R")
-source("SellkeToTrajecotory.R")
-source("SirMle.R")
-source("sir_ode.R")
-par(mfrow=c(2,2))
-T.max=104;
-sim.num=2000;
-n1=4000 # second sample
-#n2= # Sellkie sample 
 
-d=read.csv('Data1.csv')
-d=d[-(105:110),]
-n=length(d[,1])
+d=readRDS(file = "wsu.rds")
+d=as.data.frame(d[-(105:110),])
 
+T.max=104; # cut-off time point 
+n1=10000; # initial number of susceptible 
+burn = 100; #  burning period
+thin =10; # tinning period 
+nrepeat = 1000; # number of posterior sample;  
+sim.num= burn + nrepeat * thin; # total number of simulation 
 
-init.data <- function(d, n1){
+# The input data only has daily number new infection. 
+# init.data function generate infection period using exponential distribution;
+# Input argument: 
+#   d: input ata 
+#   n1: initial number of susceptible
+#   la: mean of infection period  
+init.data <- function(d, n1, la = 5){
         n=length(d[,1])
         d[n,1]=n1; d[1,2]  # 18234
         tot=sum(d[,1])
         d=d[,1]
-        la=5
         dd=NULL
         set.seed(1124)
         for (i in 1:n) {
@@ -38,34 +37,16 @@ init.data <- function(d, n1){
         }
         return(dd)
 }
+pop.data = init.data(d,n1)
 
+sds <- SDS.Likelihood.withN.MCMC(data = pop.data, Tmax=T.max, nrepeat = sim.num, tun=c(0.1,0.1,0.1,5000), 
+                                   prior.a=c(0.001,0.001,0.001,0.001), prior.b=c(0.001,0.001,0.001,0.001), ic = c(0.25, 0.2, 0.01))
 
-nrepeat=100
-n.gen=matrix(0,nrow=nrepeat,ncol=1)
-exp.gen=matrix(0,nrow=nrepeat,ncol=1)
+selrow = burn+seq(0,by=thin,length.out = nrepeat)
+summary(sds[selrow, ]) 
+apply(sds[selrow, ],2, quantile,probs = c(0.025, 0.975))
 
-theta.gen=matrix(0,nrow=nrepeat,ncol=3)
-
-n1=0;theta = c(0.25, 0.2, 0.01)
-        
-
-
-for (rep in 1:nrepeat) {
-        pop.data = init.data(d,n1)
-        n2 = length(pop.data[,1])
-        samp.data <- pop.data[sort(sample.int(n2,min(n2,500))),]
-        sds <- SDS.Likelihood.MCMC(data = samp.data, Tmax=T.max, nrepeat = sim.num, tun=c(0.1,0.1,0.1), 
-                                   prior.a=c(0.001,0.001,0.001), prior.b=c(0.001,0.001,0.001), ic = theta)
-        rho=mean(sds[-(1:1000),3])
-        beta=mean(sds[-(1:1000),1])
-        gamma=mean(sds[-(1:1000),2])
-        theta=c(beta,gamma,rho)
-        tau <- uniroot(function(x) 1 - x - exp(-(beta)/gamma *(x + rho)), c(0, 1))$root
-        n1=rnbinom(1,mu=2276*(1-tau)/tau,size=2276)
-        expt = ode.final.size.cnt(x0=n2,y0=n2*rho,ga=gamma,la=beta,k=50)[50]
-        n.gen[rep,]=n1
-        theta.gen[rep,]=theta
-        exp.gen[rep,]=expt
-        cat("iter: ",rep,', Epidemic_size: Model Predicted=',expt,', Observed=',sum(dd[,1]<T.max))
-}
-
+plot(sds[,1],type="l")
+plot(sds[,2],type="l")
+plot(sds[,3],type="l")
+plot(sds[,4],type="l")
