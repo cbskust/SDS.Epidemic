@@ -137,7 +137,7 @@ SDS.MCMC <- function(fitn = T, data, Tmax, nrepeat = 1000,
       theta[rep,4] = n
     }
   }
-  cat("Acceptance ratio of parameters: ",count/nrepeat,"\n")
+  cat("\n","Acceptance ratio of parameters: ",count/nrepeat,"\n")
   if(fitn ==T){
     colnames(theta) = c("beta","gamma","rho", "N")
   }else{
