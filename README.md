@@ -18,6 +18,10 @@ GaussianMCMC.R: This function generates posterior samples of beta, gamma, and rh
 
 SdsMCMC.R: These functions are to draw posterior samples using MCMC for SDS likelihood in subsection 4.2 and Algorithm 5.1.
 
-Example_code.R: This file provides examples using R codes to estimate WSU H1N1 daeta and to generate synthetic epidemic data and to estimate parameters accoriding to estimation methods described in the paper. 
+Example1.R: This file provides examples using R codes to estimate WSU H1N1 daeta using MCMC for SDS likelhood.
+
+Example2.R : This file provides examples using R codes to estimate synthetic epidemic data with Sellke construction to utilize MCMC for SDS likelhood.
+
+Example3.R : This file provides examples using R codes to estimate synthetic epidemic data with Sellke construction to utilize maximum likelihood and MCMC for Doob Gillespie method. 
 
 WSU.csv: example data of H1N1 pandemic data from WSU. The original data only has daily counts of new infection. We modifed it to use SDS method. 
