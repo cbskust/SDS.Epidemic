@@ -57,22 +57,23 @@ llikelihood <- function(SI_ti, p.m, delta.t = delta, n.num = n, nz.num = nz) {
   return(lik)
 }
 
+
 # This function generates posterior samples of beta, gamma, and rho using MCMC based 
 #   on SDS likelihood in subsection 4.2
-# This function includes additional step for generating initial number of susceptible n. using NegativeBinomial
-# fitn: if T the function estimate initial number of susceptible 
-# if F the function does not estimate N and calculate from data, so inputed data must cover total population 
-# data:  input data set, must be a form of sellke empidemic (two columns. first is infection time, second is recovery time)
+# This function includes an additional step for generating the initial number of susceptible n. using NegativeBinomial
+# data:  input data set, must be a form of Sellke epidemic (two columns. first is infection time, second is recovery time)
 # Tmax: cutoff time of epidemic
+# fitn: if T the function estimate initial number of susceptible 
+# if F the function does not estimate N and calculate from data, so inputted data must cover a total population 
 # nrepeat: number of iteration of MCMC 
-# prior.a: hyper shape parameter of gamma prior for beta, gamma, rho, hyper paramter lambda
-# prior.b: hyper rate parameter of gamma prior for beta, gamma, rho, hyper paramter lambda
+# prior.a: hyper shape parameter of gamma prior for beta, gamma, rho, hyper parameter lambda
+# prior.b: hyper rate parameter of gamma prior for beta, gamma, rho, hyper parameter lambda
 # ic: initial value of beta, gamma, rho and N 
 # returning posterior samples of beta, gamma, rho (with fitn=F) or beta, gamma, rho, and n (with fitn=T)
 # This function uses RAM method via adapt_S() function from ramcmc R-package
 
 
-SDS.MCMC <- function(fitn = T, data, Tmax, nrepeat = 1000, 
+SDS.MCMC <- function(data, Tmax, fitn = T, nrepeat = 1000, 
                                       prior.a, prior.b, ic = c(k1, k2, k3, k4)) {
   if(fitn == T) {
     n <- ic[4]
@@ -126,7 +127,6 @@ SDS.MCMC <- function(fitn = T, data, Tmax, nrepeat = 1000,
     S <- ramcmc::adapt_S(S, u, alpha, rep, gamma = min(1, (3 * rep)^(-2/3)))
     theta[rep,1:3] <- parm.m
     
-
     if (fitn ==T){
       # updating tau 
       x=vector('numeric',50)
@@ -136,6 +136,7 @@ SDS.MCMC <- function(fitn = T, data, Tmax, nrepeat = 1000,
       n = cnt_obs + rnbinom(1,cnt_obs,prob=tau)
       theta[rep,4] = n
     }
+    if (rep%%1000 == 0) cat("0") 
   }
   cat("\n","Acceptance ratio of parameters: ",count/nrepeat,"\n")
   if(fitn ==T){
@@ -145,5 +146,55 @@ SDS.MCMC <- function(fitn = T, data, Tmax, nrepeat = 1000,
   } 
   return(theta)
 }
+
+
+#This Plot summrizes MCMC simulation results. 
+# theta: inputted data set. It contains MCMC simulation results.
+# fitn: if T the function estimate initial number of susceptible 
+# if F the function does not estimate N and calculate from data, so inputted data must cover a total population 
+# burn:  burning period
+# thin: tinning period 
+# nrepeat: number of posterior sample;  
+
+result <- function(data, fitn = T, burn1=burn, nrepeat1=nrepeat, thin1=thin){
+  sel = burn1+seq(0,by=thin1,length.out = (nrepeat1))
+  result = data[sel,]; 
+  stat = rbind(apply(result,2,min),
+               apply(result,2,quantile,probs=0.25),
+               apply(result,2,median),
+               apply(result,2,mean),
+               apply(result,2,quantile,probs=0.75),
+               apply(result,2, max),
+               apply(result,2, sd),
+               apply(result,2, sd)/apply(result,2, mean))
+  if (fitn==T){
+    colnames(stat) = c("beta","gamma","rho", "N")
+    rownames(stat) = c("Min.","1st Qu.", "Median", "Mean", "3rd Qu.", "Max", "std", "CV")
+  }else{
+    colnames(stat) = c("beta","gamma","rho")
+    rownames(stat) = c("Min.","1st Qu.", "Median", "Mean", "3rd Qu.", "Max", "std", "CV")
+  }
+  print(stat)
+  
+  if (fitn==T){
+    par(oma = c(0, 0, 4, 0), mar = c(4, 4, 1, 1))
+    mat = matrix(c(1, 2, 3, 4), 2, 2, byrow = T)
+    layout(mat)
+    plot(data[,1], type = "l", ylab = "beta", main="")
+    plot(data[,2], type = "l", ylab = "gamma", main="")
+    plot(data[,3], type = "l", ylab = "rho", main="")
+    plot(data[,4], type = "l", ylab = "N", main="")    
+  }else{
+    par(oma = c(0, 0, 4, 0), mar = c(4, 4, 1, 1))
+    mat = matrix(c(1, 1, 2, 3), 2, 2, byrow = T)
+    layout(mat)
+    plot(data[,1], type = "l", ylab = "beta", main="")
+    plot(data[,2], type = "l", ylab = "gamma", main="")
+    plot(data[,3], type = "l", ylab = "rho", main="")
+  }
+  par(mfrow=c(1,1))
+}
+
+
 
 
