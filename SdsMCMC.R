@@ -97,7 +97,7 @@ SDS.MCMC <- function(data, Tmax, fitn = T, nrepeat = 1000,
     repeat {
       u <- mvrnorm(1, c(0, 0, 0), diag(c(1, 1, 1)))
       parm.star <- parm.m + S %*% u
-      if ((min(parm.star) > 0) & (parm.star[3] < 1) & (sum(is.na(parm.star))==0)) {
+      if ((min(parm.star) > 0) & (parm.star[3] < 1) ) {
         tau <- uniroot(function(x) 1 - x - exp(-parm.star[1]/parm.star[2] * 
                                                  (x + parm.star[3])), c(0, 1))$root
         if ((tau > 0) & (tau < 1)) 
