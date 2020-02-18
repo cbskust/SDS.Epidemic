@@ -113,6 +113,8 @@ SDS.MCMC <- function(data, Tmax, fitn = T, nrepeat = 1000,
     l.lik.star <- llikelihood(SI_ti = sir.star, p.m = parm.star, n.num = n, 
                               delta.t = delta, nz.num = nz)
     alpha <- exp(l.lik.star - l.lik.m 
+                 + sum(log(parm.star)) + log(1-parm.star[3]) #jacobian
+                 - sum(log(parm.m))    - log(1-parm.m[3])    #jacobian 
                  + dgamma(parm.star[1], prior.a[1], prior.b[1], log = T) 
                  - dgamma(parm.m[1], prior.a[1], prior.b[1], log = T)
                  + dgamma(parm.star[2], prior.a[2], prior.b[2], log = T) 
