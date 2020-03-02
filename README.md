@@ -4,7 +4,9 @@ data maximum-likelihood analysis.
 
 In this repository, we provide the necessary toolkit for a statistical inference method based on the SDS interpretation of the compartmental susceptible-infected-recovered (SIR) epidemic model due to Kermack and McKendrick for the paper on http://dx.doi.org/10.1098/rsfs.2019.0048.
 
-We provide 8 R scripts.
+We provide a R package and three example R codes.
+
+Description for mainly used functions in the SDSMCMC package  
 
 Sellke.R:  This function generate synthetic epidemic data using Sellke construciotn  in Algorithm 3.1. 
 
@@ -18,7 +20,10 @@ GaussianMCMC.R: This function generates posterior samples of beta, gamma, and rh
 
 SdsMCMC.R: These functions are to draw posterior samples using MCMC for SDS likelihood in subsection 4.2 and Algorithm 5.1.
 
-Example1.R: This file provides examples using R codes to estimate WSU H1N1 daeta using MCMC for SDS likelhood.
+
+Description for example files 
+
+Example1.R: This file provides examples using R codes to estimate WSU H1N1 daeta using MCMC for SDS likelhood. This example used "WSU.csv" data file. 
 
 Example2.R : This file provides examples using R codes to estimate synthetic epidemic data with Sellke construction to utilize MCMC for SDS likelhood.
 
