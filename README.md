@@ -8,21 +8,22 @@ We provide a R package and three example R codes. In order to use the pacakge, a
 
 Description for mainly used functions in the SDSMCMC package  
 
-Sellke.R:  This function generate synthetic epidemic data using Sellke construciotn  in Algorithm 3.1. 
+Sellke():  This function generate synthetic epidemic data using Sellke construciotn  in Algorithm 3.1. 
 
-SellkeToTrajectory.R:  This function converts epidemic data wih infection and removed time to SIR trajectory data with S(t), I(t), and R(t) at discrete time t
+SellkeToTrajectory():  This function converts epidemic data wih infection and removed time to SIR trajectory data with S(t), I(t), and R(t) at discrete time t
 
-SirMle.R: This function calculates MLE using SIR empidemic data.
+SirMle(): This function calculates MLE using SIR empidemic data.
 
-GillespieMCMC.R: This function generates posterior samples of beta, gamma, and rho using MCMC based on Examce likelihood in subsection 4.1.
+GillespieMCMC(): This function generates posterior samples of beta, gamma, and rho using MCMC based on Examce likelihood in subsection 4.1.
 
-GaussianMCMC.R: This function generates posterior samples of beta, gamma, and rho using MCMC based on Gaussian likelihood in subsection A.2.
+GaussianMCMC(): This function generates posterior samples of beta, gamma, and rho using MCMC based on Gaussian likelihood in subsection A.2.
 
-SdsMCMC.R: These functions are to draw posterior samples using MCMC for SDS likelihood in subsection 4.2 and Algorithm 5.1.
+SdsMCMC(): This function conducts MCMC simuation using SDS likelihood in subsection 4.2 and Algorithm 5.1 and generate posterior samples of parameters from their posterior distribution.
+
+result(): This function produce a summary statistics table of posterior samples and fugures for MCMC diagnostics. 
 
 
 Description for example files 
-
 Example1.R: This file provides examples using R codes to estimate WSU H1N1 daeta using MCMC for SDS likelhood. This example used "WSU.csv" data file. 
 
 Example2.R : This file provides examples using R codes to estimate synthetic epidemic data with Sellke construction to utilize MCMC for SDS likelhood.
