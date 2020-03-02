@@ -4,7 +4,7 @@ data maximum-likelihood analysis.
 
 In this repository, we provide the necessary toolkit for a statistical inference method based on the SDS interpretation of the compartmental susceptible-infected-recovered (SIR) epidemic model due to Kermack and McKendrick for the paper on http://dx.doi.org/10.1098/rsfs.2019.0048.
 
-We provide a R package and three example R codes. In order to use the pacakge, a user need to install SDSMCMC R pakcage in your local mashine first. 
+We provide a R package and three example R codes. In order to use the pacakge, a user need to download "SDSMCMC_0.1.0.tar.gz" and install SDSMCMC R pakcage in your local machine. 
 
 Description for mainly used functions in the SDSMCMC package  
 
